@@ -1,0 +1,114 @@
+telco_churn_raw:
+  type: kedro_datasets.spark.SparkDataset  
+  filepath: data/01_raw/telco_churn.csv
+  file_format: csv
+  load_args:
+    header: "true"
+    inferSchema: "true"
+  save_args:
+    sep: ","
+    header: "true"
+
+telco_churn_intermediate:
+  type: kedro_datasets.spark.SparkDataset
+  filepath: data/02_intermediate/telco_churn_data
+  file_format: csv
+  load_args:
+    header: "true"
+    inferSchema: "true"
+  save_args:
+    header: "true"
+    sep: ","
+    mode: "overwrite"
+
+telco_churn_limpo:
+  type: spark.SparkDataset
+  filepath: data/03_primary/telco_churn_limpo
+  file_format: parquet
+  save_args:
+    mode: overwrite
+
+telco_churn_outliers_tratado:
+  type: spark.SparkDataset
+  filepath: data/03_primary/telco_churn_outliers_tratado
+  file_format: parquet
+  save_args:
+    mode: overwrite
+
+telco_churn_com_variaveis:
+  type: spark.SparkDataset
+  filepath: data/03_primary/telco_churn_com_variaveis
+  file_format: parquet
+  save_args:
+    mode: overwrite
+
+
+
+telco_churn_com_features:
+  type: spark.SparkDataset
+  filepath: data/04_feature/telco_churn_com_features
+  file_format: parquet
+  save_args:
+    mode: overwrite
+
+
+modelo_logistico:
+  type: pickle.PickleDataset
+  filepath: data/06_models/modelo_logistico.pkl
+  backend: pickle
+  save_args:
+    mode: overwrite 
+
+predictions:
+  type: spark.SparkDataset
+  filepath: data/05_model_input/predictions
+  file_format: parquet
+  save_args:
+    mode: overwrite
+
+modelo_logistico_spark:
+  type: churn_analytics.datasets.spark_model_dataset.SparkModelDataset
+  filepath: data/06_models/modelo_logistico_spark
+  save_args:
+    mode: overwrite
+
+modelo_logistico_spark_output:
+  type: churn_analytics.datasets.spark_model_dataset.SparkModelDataset
+  filepath: data/07_model_output/modelo_logistico_spark
+
+avaliacao_modelo:
+  type: pandas.CSVDataset
+  filepath: data/08_reporting/avaliacao_modelo.csv
+  save_args:
+    index: False
+
+dados_balanceados:
+  type: spark.SparkDataset
+  filepath: data/05_model_input/dados_balanceados
+  file_format: parquet
+  save_args:
+    mode: overwrite
+
+dados_para_viz:
+  type: pandas.ParquetDataset
+  filepath: data/08_reporting/dados_para_viz.parquet
+  save_args:
+    index: false
+
+metricas_avancadas:
+  type: pandas.CSVDataset
+  filepath: data/08_reporting/metricas_avancadas.csv
+  save_args:
+    index: false
+
+grafico_distribuicao_churn:
+  type: kedro_datasets.matplotlib.MatplotlibWriter
+  filepath: data/09_visuals/grafico_distribuicao_churn.png
+
+grafico_correlacao:
+  type: kedro_datasets.matplotlib.MatplotlibWriter
+  filepath: data/09_visuals/grafico_correlacao.png
+
+grafico_outliers:
+  type: kedro_datasets.matplotlib.MatplotlibWriter
+  filepath: data/09_visuals/grafico_outliers.png
